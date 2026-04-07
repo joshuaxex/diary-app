@@ -1,9 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function App() {
-  const [entries, setEntries] = useState([]);
+  const [entries, setEntries] = useState(() => {
+    const saved = localStorage.getItem("diaryEntries");
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("diaryEntries", JSON.stringify(entries));
+  }, [entries]);
 
   const addEntry = () => {
     if (!text.trim()) return;
